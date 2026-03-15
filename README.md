@@ -4,7 +4,7 @@
 <img alt="Static Badge" src="https://img.shields.io/badge/Made%20for%20PPSSPP-blue">
 </div>
 
--- 
+---
 
 
 #### Why?
@@ -30,9 +30,9 @@ Multiple downloads are available for various controllers and layouts. Download t
   </tr></thead>
 <tbody>
   <tr>
-    <td><img src="github/layouts/ps.png" alt="PlayStation Layout" width="100" height="100"></td>
-    <td><img src="github/layouts/xbox.png" alt="Xbox Layout" width="100" height="100"></td>
-    <td><img src="github/layouts/nintendo.png" alt="Nintendo Layout" width="100" height="100"></td>
+    <td><img src="layouts/ps.png" alt="PlayStation Layout" width="100" height="100"></td>
+    <td><img src="layouts/xbox.png" alt="Xbox Layout" width="100" height="100"></td>
+    <td><img src="layouts/nintendo.png" alt="Nintendo Layout" width="100" height="100"></td>
   </tr>
   <tr>
     <td>Download</td>
@@ -44,7 +44,7 @@ Multiple downloads are available for various controllers and layouts. Download t
 </div>
 
 **Nightly**  
-To try the latest changes, download the nightly release from [here](). Only the PlayStation controller layout is supported in the nightly release.
+To try the latest changes, download the nightly release from [here](). The PlayStation controller layout is applied in the nightly release by default.
 
 ### Installation
 Extract your chosen release and drag the `NPUG30040` folder to...
