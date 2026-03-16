@@ -1,0 +1,137 @@
+name: Release Texture Pack
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag"
+        required: true
+        type: string
+      patch_notes:
+        description: "Patch notes"
+        required: false
+        default: "No patch notes provided."
+        type: string
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # STEP 1: CLONE NPUG30040 INTO VARIANT FOLDERS
+      - name: Clone texture pack into PS, XBOX, and NS working folders
+        shell: cmd
+        run: |
+          xcopy /E /I /H /Y NPUG30040 NPUG30040-PS\NPUG30040
+          xcopy /E /I /H /Y NPUG30040 NPUG30040-XBOX\NPUG30040
+          xcopy /E /I /H /Y NPUG30040 NPUG30040-NS\NPUG30040
+
+      # STEP 2: COPY LAYOUT FILES INTO THEIR RESPECTIVE FOLDERS
+      - name: Apply PS button prompts
+        shell: cmd
+        run: |
+          for %%f in (layouts\buttonprompts\PS_*) do (
+            set "fname=%%~nxf"
+            setlocal enabledelayedexpansion
+            set "dest=!fname:PS_=!"
+            copy "%%f" "NPUG30040-PS\NPUG30040\buttonprompts\!dest!"
+            endlocal
+          )
+
+      - name: Apply XBOX button prompts
+        shell: cmd
+        run: |
+          for %%f in (layouts\buttonprompts\XBOX_*) do (
+            set "fname=%%~nxf"
+            setlocal enabledelayedexpansion
+            set "dest=!fname:XBOX_=!"
+            copy "%%f" "NPUG30040-XBOX\NPUG30040\buttonprompts\!dest!"
+            endlocal
+          )
+
+      - name: Apply NS button prompts
+        shell: cmd
+        run: |
+          for %%f in (layouts\buttonprompts\NS_*) do (
+            set "fname=%%~nxf"
+            setlocal enabledelayedexpansion
+            set "dest=!fname:NS_=!"
+            copy "%%f" "NPUG30040-NS\NPUG30040\buttonprompts\!dest!"
+            endlocal
+          )
+
+      # STEP 3: KTX2 CONVERSION
+      # Convert .png files to .ktx2 in each folder, then delete the originals.
+      - name: Convert PS textures to KTX2
+        shell: cmd
+        run: |
+          for /r NPUG30040-PS\NPUG30040 %%v in (*.png) do (
+            tools\basisu "%%v" -ktx2 -uastc -mipmap -output_path "%%~dpv"
+            del "%%v"
+          )
+
+      - name: Convert XBOX textures to KTX2
+        shell: cmd
+        run: |
+          for /r NPUG30040-XBOX\NPUG30040 %%v in (*.png) do (
+            tools\basisu "%%v" -ktx2 -uastc -mipmap -output_path "%%~dpv"
+            del "%%v"
+          )
+
+      - name: Convert NS textures to KTX2
+        shell: cmd
+        run: |
+          for /r NPUG30040-NS\NPUG30040 %%v in (*.png) do (
+            tools\basisu "%%v" -ktx2 -uastc -mipmap -output_path "%%~dpv"
+            del "%%v"
+          )
+
+      # STEP 4: PATCH textures.ini
+      # Replace all .png references with .ktx2 in each textures.ini
+      - name: Patch textures.ini for PS
+        shell: pwsh
+        run: |
+          $f = "NPUG30040-PS\NPUG30040\textures.ini"
+          (Get-Content $f) -replace '\.png', '.ktx2' | Set-Content $f
+
+      - name: Patch textures.ini for XBOX
+        shell: pwsh
+        run: |
+          $f = "NPUG30040-XBOX\NPUG30040\textures.ini"
+          (Get-Content $f) -replace '\.png', '.ktx2' | Set-Content $f
+
+      - name: Patch textures.ini for NS
+        shell: pwsh
+        run: |
+          $f = "NPUG30040-NS\NPUG30040\textures.ini"
+          (Get-Content $f) -replace '\.png', '.ktx2' | Set-Content $f
+
+      # STEP 5: ZIP EACH VARIANT
+      - name: Zip PS build
+        shell: pwsh
+        run: Compress-Archive -Path "NPUG30040-PS\NPUG30040" -DestinationPath "NPUG30040-PS.zip"
+
+      - name: Zip XBOX build
+        shell: pwsh
+        run: Compress-Archive -Path "NPUG30040-XBOX\NPUG30040" -DestinationPath "NPUG30040-XBOX.zip"
+
+      - name: Zip NS build
+        shell: pwsh
+        run: Compress-Archive -Path "NPUG30040-NS\NPUG30040" -DestinationPath "NPUG30040-NS.zip"
+
+      # STEP 6: PUBLISH RELEASE
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          name: ${{ inputs.tag }}
+          body: ${{ inputs.patch_notes }}
+          files: |
+            NPUG30040-PS.zip
+            NPUG30040-XBOX.zip
+            NPUG30040-NS.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
