@@ -16,6 +16,8 @@ on:
 jobs:
   build-and-release:
     runs-on: windows-latest
+    permissions:
+          contents: write
 
     steps:
       - name: Checkout repository
@@ -76,7 +78,7 @@ jobs:
         shell: pwsh
         run: Compress-Archive -Path "NPUG30040-NS\NPUG30040" -DestinationPath "NPUG30040-NS.zip"
 
-      # STEP 5: PUBLISH RELEASE
+      # STEP 4: PUBLISH RELEASE
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
