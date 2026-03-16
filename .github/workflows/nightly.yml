@@ -1,0 +1,64 @@
+name: Nightly Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    permissions:
+          contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get commits since last stable release
+        id: changelog
+        run: |
+          # Find the last non-nightly release tag
+          LAST_STABLE=$(git tag --sort=-creatordate | grep -v '^nightly' | head -n 1)
+
+          if [ -z "$LAST_STABLE" ]; then
+            echo "No stable release found — listing all commits."
+            LOG=$(git log --pretty=format:"- %s (%h)" HEAD)
+          else
+            echo "Last stable release: $LAST_STABLE"
+            LOG=$(git log --pretty=format:"- %s (%h)" ${LAST_STABLE}..HEAD)
+          fi
+
+          if [ -z "$LOG" ]; then
+            LOG="- No new commits since last stable release."
+          fi
+
+          # Write to file to safely preserve newlines and special characters
+          {
+            echo "CHANGELOG<<EOF"
+            echo "$LOG"
+            echo "EOF"
+          } >> "$GITHUB_ENV"
+
+      - name: Zip texture pack
+        run: zip -r PeggleHD-nightly.zip NPUG30040/
+
+      - name: Set release timestamp
+        run: echo "TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M UTC')" >> "$GITHUB_ENV"
+
+      - name: Update nightly release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          name: PeggleHD-${{ env.TIMESTAMP }}
+          prerelease: true
+          body: |
+            > ⚠️ This is an automated nightly build. It may contain broken textures and compatibility is not guaranteed.
+
+            ### Changes since last stable release
+            ${{ env.CHANGELOG }}
+          files: PeggleHD-nightly.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
