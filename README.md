@@ -26,13 +26,13 @@ Multiple downloads are available for various controllers and layouts. Download t
   <tr>
     <th>PlayStation<br>(Default)<br></th>
     <th>Xbox</th>
-    <th>Nintendo<br>(X/O Swapped)<br></th>
+    <th>Nintendo<br>(Swapped)<br></th>
   </tr></thead>
 <tbody>
   <tr>
-    <td><img src="layouts/ps.png" alt="PlayStation Layout" width="100" height="100"></td>
-    <td><img src="layouts/xbox.png" alt="Xbox Layout" width="100" height="100"></td>
-    <td><img src="layouts/nintendo.png" alt="Nintendo Layout" width="100" height="100"></td>
+    <td><img src="layouts/ps.png" alt="PlayStation Layout" width="120" height="120"></td>
+    <td><img src="layouts/xbox.png" alt="Xbox Layout" width="120" height="120"></td>
+    <td><img src="layouts/nintendo.png" alt="Nintendo Layout" width="120" height="120"></td>
   </tr>
   <tr>
     <td>Download</td>
