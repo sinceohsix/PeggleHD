@@ -15,7 +15,7 @@ Because Peggle doesn't have an official Nintendo Switch port for some reason.. I
 - Updated UI, Backgrounds, Characters, and more!
 - Pixel-perfect HD textures ported straight from the PS3.
 - Multiple variants supporting new controllers and layouts.
-- KTX2 compression for fast loading, wide support, and small file size.
+- <s>KTX2 compression for fast loading, wide support, and small file size.</s> (Coming soon!)
 - HD (720p) Peggle action in your pocket!
 
 ### Download
@@ -35,9 +35,9 @@ Multiple downloads are available for various controllers and layouts. Download t
     <td><img src="layouts/nintendo.png" alt="Nintendo Layout" width="120" height="120"></td>
   </tr>
   <tr>
-    <td>Download</td>
-    <td>Download</td>
-    <td>Download</td>
+    <td><a href="https://github.com/sinceohsix/PeggleHD/releases/latest/download/NPUG30040-PS.zip">Download</a></td>
+    <td><a href="https://github.com/sinceohsix/PeggleHD/releases/latest/download/NPUG30040-XBOX.zip">Download</a></td>
+    <td><a href="https://github.com/sinceohsix/PeggleHD/releases/latest/download/NPUG30040-NS.zip">Download</a></td>
   </tr>
 </tbody>
 </table>
