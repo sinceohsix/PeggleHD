@@ -44,7 +44,7 @@ Multiple downloads are available for various controllers and layouts. Download t
 </div>
 
 **Nightly**  
-To try the latest changes, download the nightly release from [here](https://github.com/sinceohsix/PeggleHD/releases/download/nightly/PeggleHD-nightly.zip). The PlayStation controller layout is applied in the nightly release by default.
+To try the latest changes, download the nightly release from [here](https://github.com/sinceohsix/PeggleHD/releases/nightly/). The PlayStation controller layout is applied in the nightly release by default.
 
 ### Installation
 Extract your chosen release and drag the `NPUG30040` folder to...
